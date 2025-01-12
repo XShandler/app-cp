@@ -31,9 +31,9 @@ df, df1 = load_data()
 st.title("📊 Biênio 2023-2025 - Equipamentos")
 
 # Botão para atualizar dados
-if st.button("🔄 Atualizar Base"):
+if st.sidebar.button("🔄 Atualizar Base"):
     df, df1 = load_data()
-    st.success("Dados atualizados com sucesso!")
+    st.sidebar.success("Dados atualizados com sucesso!")
 
 # ==============================
 # Gráficos com Altair
@@ -55,7 +55,7 @@ pie_chart = alt.Chart(data_totals).mark_arc(innerRadius=50).encode(
     theta=alt.Theta(field="Quantidade", type="quantitative"),
     color=alt.Color(field="Categoria", type="nominal"),
     tooltip=["Categoria", "Quantidade"]
-).properties(title="Proporção Geral dos Equipamentos")
+).properties(title="")
 
 # Card de Investimento
 try:
@@ -74,7 +74,7 @@ bar_chart = alt.Chart(df1).mark_bar().encode(
     tooltip=["Descrição", "Adquiridos"]
 ).properties(
     title="Adquiridos por Descrição",
-    height=300
+    height=500
 )
 
 # Estilo para borda
@@ -98,20 +98,23 @@ bar_chart = alt.Chart(df1).mark_bar().encode(
 # ==============================
 # Layout no Streamlit
 # ==============================
-col1, col2, col3 = st.columns([1.5,1,1.5])
+col1, col2 = st.columns([1,3])
 
 with col1:
-    st.altair_chart(pie_chart, use_container_width=True)
-
-with col2:
+    st.subheader("💰 Investimento Total (R$)")
     #st.markdown('<div class="borda-container">', unsafe_allow_html=True)
-    st.metric(label="Investimento Total (R$)", value=f"R$ {valor:,.2f}")
+    st.metric(label="", value=f"R$ {valor:,.2f}")
     #st.markdown('</div>', unsafe_allow_html=True)
-
-#st.markdown('<div class="borda-container">', unsafe_allow_html=True)
-with col3:
+    st.html("<hr/>")
+    st.subheader("📊 Proporção Geral dos Equipamentos")
+    st.altair_chart(pie_chart, use_container_width=True)
+with col2:
     st.subheader("📊 Quantidade Adquirida por Item")
     st.altair_chart(bar_chart, use_container_width=True)
+
+#st.markdown('<div class="borda-container">', unsafe_allow_html=True)
+#with col2:
+ 
 #st.markdown('</div>', unsafe_allow_html=True)
 
 # Exibe tabela
